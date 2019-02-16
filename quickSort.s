@@ -1,5 +1,5 @@
 .data
-sortMe:     .byte   3,1,4,5,9,2,6
+sortMe:     .byte   9, 100, 55, 78, 1, 6, 3
 lenSortMe:  .byte   7
 .text
 
