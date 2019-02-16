@@ -36,8 +36,12 @@ sub     $t1, $t1, $s7       # subtract one from the hi value to account for zero
 # start the quicksort function
 # get our hi and low values
 quicksort:
+# check whether lo = hi
+blt     $a0, $a1, lolessthanhi  # if lo < hi then do stuff
+    jr $ra                      # otherwise return to calling function
+lolessthanhi:
 addi    $t0, $a0, 0          # load lo param into $t0 which holds the lo value for this iteration
-addi    $t1, $a1, 0          # load hi param into $t1 which holds the hi value for this iteration
+addi    $t1, $a1, -1         # load hi param into $t1 which holds the hi value for this iteration
 
 # partition the array - initial partition is the last element of the array
 add     $s2, $t1, $0        # $s2 = partition index = hi index
@@ -72,11 +76,13 @@ cmpBarPiv:
 #call quicksort on the lower array (lo, foo)
 addi    $a0, $t0, 0     # set $a0 = lo index
 addi    $a1, $t2, 0     # set $a1 = foo index
-#call quicksort
+jal quicksort           # call quicksort
 
-#call quicksort on the upper arra (foo+1, hi)
+#call quicksort on the upper array (foo+1, hi)
 addi    $a0, $t2, 1     # set $a0 = foo+1 index
 addi    $a1, $t1, 0     # set $a1 = hi index
-#quicksort
+jal quicksort           # call quicksort
 
 sorted:
+li      $v0, 10         # load the value 10 for exit into $v0
+syscall                 # execute syscall 10 = exit
