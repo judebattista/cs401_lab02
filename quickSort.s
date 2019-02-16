@@ -4,12 +4,9 @@ lenSortMe:  .byte   7
 .text
 
 main:
-# $s0 = array base address, $s1 = i
-# initialization
 # $s0 = address of array
-# $s1 = size of the array
+# $s1 = length of the array
 # $s2 = current partition index
-# $s7 = 1 for subtraction purposes
 # $t0 = current lo index
 # $t1 = current hi index
 # $t2 = Foo index
@@ -26,20 +23,15 @@ main:
 # initialization
 la      $s0, sortMe         # load the address of array1 into $s0
 lb      $s1, lenSortMe      # $s1 = length of the array
-addi    $s7, $0, 1          # $s7 set to 1 so we can easily subtract 1 from things
-#addi    $t0, $0, 0          # $t0 = current lo value = 0
 addi    $a0, $0, 0         # $a0 = lo value parameter = 0
-#addi    $t1, $s1, 0         # $t1 = current hi value = lenSortMe
-addi    $a1, $s1, 0         # $s1 = current hi value parameter = lenSortMe
-sub     $t1, $t1, $s7       # subtract one from the hi value to account for zero-based arrays
+addi    $a1, $s1, -1         # $s1 = current hi value parameter = lenSortMe - 1
 
 # start the quicksort function
-# get our hi and low values
 quicksort:
 # check whether lo = hi
-blt     $a0, $a1, lolessthanhi  # if lo < hi then do stuff
+blt     $a0, $a1, lowlessthanhi # if lo < hi then do stuff
     jr $ra                      # otherwise return to calling function
-lolessthanhi:
+lowlessthanhi:
 addi    $t0, $a0, 0          # load lo param into $t0 which holds the lo value for this iteration
 addi    $t1, $a1, -1         # load hi param into $t1 which holds the hi value for this iteration
 
@@ -84,5 +76,6 @@ addi    $a1, $t1, 0     # set $a1 = hi index
 jal quicksort           # call quicksort
 
 sorted:
+#end program
 li      $v0, 10         # load the value 10 for exit into $v0
 syscall                 # execute syscall 10 = exit
