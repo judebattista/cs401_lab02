@@ -23,8 +23,8 @@ main:
 # initialization
 la      $s0, sortMe         # load the address of array1 into $s0
 lb      $s1, lenSortMe      # $s1 = length of the array
-addi    $a0, $0, 0         # $a0 = lo value parameter = 0
-addi    $a1, $s1, -1         # $s1 = current hi value parameter = lenSortMe - 1
+addi    $a0, $0, 0          # $a0 = lo value parameter = 0
+addi    $a1, $s1, -1        # $s1 = current hi value parameter = lenSortMe - 1
 
 # start the quicksort function
 quicksort:
@@ -32,10 +32,6 @@ quicksort:
 blt     $a0, $a1, lowlessthanhi # if lo < hi then do stuff
     jr $ra                      # otherwise return to calling function
 lowlessthanhi:
-
-# copy the current lo and hi params into local registers
-# addi    $t0, $a0, 0         # store the lo param in the lo local reg
-# addi    $t1, $a1, 0         # store the hi param in the hi local reg 
 
 # partition the array - initial pivot is the last element of the array
 add     $s2, $a1, $0        # $s2 = pivot index = hi index
