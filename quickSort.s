@@ -20,14 +20,24 @@ main:
 # $t7 = FooAddress
 # $t8 = BarAddress
 # $t9 = Piv address
+# $a0 = first parameter: lo index
+# $a1 = second parameter: hi index
 
-
+# initialization
 la      $s0, sortMe         # load the address of array1 into $s0
 lb      $s1, lenSortMe      # $s1 = length of the array
 addi    $s7, $0, 1          # $s7 set to 1 so we can easily subtract 1 from things
-addi    $t0, $0, 0          # $t0 = current lo value = 0
-addi    $t1, $s1, 0         # $t1 = current hi value = lenSortMe
-sub     $t1, $t1, $s7            # subtract one from the hi value to account for zero-based arrays
+#addi    $t0, $0, 0          # $t0 = current lo value = 0
+addi    $a0, $0, 0         # $a0 = lo value parameter = 0
+#addi    $t1, $s1, 0         # $t1 = current hi value = lenSortMe
+addi    $a1, $s1, 0         # $s1 = current hi value parameter = lenSortMe
+sub     $t1, $t1, $s7       # subtract one from the hi value to account for zero-based arrays
+
+# start the quicksort function
+# get our hi and low values
+quicksort:
+addi    $t0, $a0, 0          # load lo param into $t0 which holds the lo value for this iteration
+addi    $t1, $a1, 0          # load hi param into $t1 which holds the hi value for this iteration
 
 # partition the array - initial partition is the last element of the array
 add     $s2, $t1, $0        # $s2 = partition index = hi index
@@ -58,7 +68,15 @@ cmpBarPiv:
     lb  $t6, 0($t7)             # load the value of foo based on its address into temp
     sb  $t4, ($t7)              # store the pivot value into foo's address
     sb  $t6, ($t9)              # store the value in temp (foo's old value) into pivot's address
+# end of partitioning
+#call quicksort on the lower array (lo, foo)
+addi    $a0, $t0, 0     # set $a0 = lo index
+addi    $a1, $t2, 0     # set $a1 = foo index
+#call quicksort
 
-# get the new index of the partition value
+#call quicksort on the upper arra (foo+1, hi)
+addi    $a0, $t2, 1     # set $a0 = foo+1 index
+addi    $a1, $t1, 0     # set $a1 = hi index
+#quicksort
 
-# split the array on the partition value and recurse on each half
+sorted:
